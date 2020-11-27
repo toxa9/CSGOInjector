@@ -50,7 +50,7 @@ namespace CSGOInjector
                 throw new ApplicationException("Failed to open process.");
             }
 
-            BypassCSGOHoook();
+            BypassCSGOHook();
             InjectDLL(pathToDLL);
             RestoreCSGOHook();
 
@@ -122,7 +122,7 @@ namespace CSGOInjector
             return ret;
         }
 
-        private static void BypassCSGOHoook()
+        private static void BypassCSGOHook()
         {
             for (int i = 0; i < _functions.Count; i++)
             {
