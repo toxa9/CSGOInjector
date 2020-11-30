@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 
 namespace CSGOInjector
@@ -105,6 +107,9 @@ namespace CSGOInjector
             {
                 throw new ApplicationException("Failed to create thread.");
             }
+
+            CloseHandle(threadHandle);
+            CloseHandle(handle);
         }
 
         private static UInt32 GetGamePID()
@@ -296,6 +301,12 @@ namespace CSGOInjector
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [ReliabilityContract(Consistency.WillNotCorruptState, Cer.Success)]
+        [SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool CloseHandle(IntPtr hObject);
 
         #endregion
 
