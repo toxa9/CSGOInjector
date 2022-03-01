@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.ConstrainedExecution;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -114,14 +115,21 @@ namespace CSGOInjector
 
         private static UInt32 GetGamePID()
         {
-            IntPtr hwGame = (IntPtr)FindWindow(null, "Counter-Strike: Global Offensive");
+            UInt32 ret = UInt32.MinValue;
+            Process[] proc = Process.GetProcessesByName("csgo");
+
+            if (proc.Length == 0)
+            {
+                return ret;
+            }
+
+            IntPtr hwGame = proc[0].MainWindowHandle;
 
             if (hwGame == IntPtr.Zero)
             {
-                return 0;
+                return ret;
             }
 
-            UInt32 ret = UInt32.MinValue;
             GetWindowThreadProcessId(hwGame, out ret);
 
             return ret;
